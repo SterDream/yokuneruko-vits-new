@@ -8,7 +8,10 @@ from loguru import logger
 from safetensors import safe_open
 from safetensors.torch import save_file
 
-from stdout_wrapper import SAFE_STDOUT
+try:
+    from stdout_wrapper import SAFE_STDOUT
+except:
+    from others.stdout_wrapper import SAFE_STDOUT  # type: ignore
 
 
 logger.remove()
