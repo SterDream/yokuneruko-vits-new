@@ -99,6 +99,9 @@ def run(rank, n_gpus, hps):
     net_g = SynthesizerTrn(len(symbols), hps.data.filter_length // 2 + 1, hps.train.segment_size // hps.data.hop_length, **hps.model).cuda(rank)
     net_d = MultiPeriodDiscriminator(hps.model.use_spectral_norm).cuda(rank)
 
+    net_g = torch.compile(net_g, mode="reduce-overhead", fullgraph=False)
+    net_d = torch.compile(net_d, mode="reduce-overhead", fullgraph=False)
+
     # optimizer
     optim_g = torch.optim.AdamW(
       filter(lambda p: p.requires_grad, net_g.parameters()), # net_g.parameters(), 
@@ -209,12 +212,14 @@ def run(rank, n_gpus, hps):
     pbar.close()
 
 
+@torch._dynamo.disable
 def compute_subband_loss(hps, y, y_hat_mb):
     pqmf = PQMF(y.device)
     y_mb = pqmf.analysis(y)
     return subband_stft_loss(hps, y_mb, y_hat_mb)
 
 
+@torch._dynamo.disable
 def compute_kl_loss(z_p, logs_q, m_p, logs_p, z_mask):
     return kl_loss(z_p, logs_q, m_p, logs_p, z_mask)
 
