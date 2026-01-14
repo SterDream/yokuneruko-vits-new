@@ -55,7 +55,6 @@ def run(rank, n_gpus, hps):
     if rank == 0:
       logger = utils.get_logger(hps.model_dir)
       logger.info(hps)
-      global logger
       
       utils.check_git_hash(hps.model_dir)
       writer = SummaryWriter(log_dir=hps.model_dir)
@@ -143,7 +142,7 @@ def run(rank, n_gpus, hps):
     scheduler_d = torch.optim.lr_scheduler.LambdaLR(optim_d, lr_lambda=lr_lambda, last_epoch=epoch_str - 2)
     scaler = torch.amp.GradScaler(device="cuda", enabled=hps.train.bf16_run)
     
-    logger.info("Start training.")
+    # logger.info("Start training.")
 
     diff = abs(epoch_str * len(train_loader) - (hps.train.epochs + 1) * len(train_loader))
     pbar = tqdm(
