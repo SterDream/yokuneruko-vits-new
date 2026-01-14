@@ -6,7 +6,7 @@ MAX_WAV_VALUE = 32768.0
 hps = utils.get_hparams()
 
 
-@torch.jit.script # もしかしたら高速化するかもしれないので付けとく
+
 def dynamic_range_compression_torch(x, C=1, clip_val=1e-5):
     """
     PARAMS
@@ -16,7 +16,7 @@ def dynamic_range_compression_torch(x, C=1, clip_val=1e-5):
     return torch.log(torch.clamp(x, min=clip_val) * C)
 
 
-@torch.jit.script # もしかしたら高速化するかもしれないので付けとく
+
 def dynamic_range_decompression_torch(x, C=1):
     """
     PARAMS
@@ -40,7 +40,7 @@ mel_basis = {}
 hann_window = {}
 
 
-@torch.jit.script # もしかしたら高速化するかもしれないので付けとく
+
 def spectrogram_torch(y, n_fft, sampling_rate, hop_size, win_size, center=False):
     if torch.min(y) < -1.:
         print('min value is ', torch.min(y))
