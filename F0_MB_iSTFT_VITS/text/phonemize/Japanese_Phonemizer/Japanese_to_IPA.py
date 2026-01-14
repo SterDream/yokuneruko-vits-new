@@ -1,4 +1,4 @@
-import .pyopenjtalk
+import pyopenjtalk
 
 JTALK_TO_IPA = {
     # 母音
@@ -22,3 +22,4 @@ class G2P_Japanese_to_Phoneme:
 if __name__ == "__main__":
     text = G2P_Japanese_to_Phoneme.g2p("私はアメリカ人です。")
     print(text)
+
